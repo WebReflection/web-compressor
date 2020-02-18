@@ -15,12 +15,12 @@ class WebCompressor {
     method:string   // base64 (default) or utf-16
   )
 
-  async compress(any:string): Promise<string>
+  async compress(any:string): Promise<arrayBuffer>
+  // the returned arrayBuffer has a special toString() method
+  // so that it's possible to use it either as buffer or as string
 
-  async decompress(any:string | arrayBuffer):
-    Promise<arrayBuffer>  // it has a special toString() method
-                          // so that it's possible to use it
-                          // either as buffer or as string
+  async decompress(any:string | arrayBuffer): Promise<string>
+  // the returned string is the one that was originally compressed
 }
 ```
 
