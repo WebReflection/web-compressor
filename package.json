@@ -1,6 +1,6 @@
 {
   "name": "web-compressor",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A gzip/deflate compressor based on De/CompressionStream buffers and base64",
   "main": "cjs/index.js",
   "scripts": {
