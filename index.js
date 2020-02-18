@@ -85,28 +85,30 @@ var webCompressor = (function (exports) {
   var fromCharCode = String.fromCharCode;
 
   var pack = function pack(uint8array) {
+    var extra = 0;
     var length = uint8array.length;
     var len = ceil(length / 2);
-    var uint16array = new Uint16Array(len);
+    var uint16array = new Uint16Array(len + 1);
 
     for (var j = 0, i = 0; i < len; i++) {
       var c = uint8array[j++] << 8;
-      uint16array[i] = c + (j < length ? uint8array[j++] : 0xFF);
+      uint16array[i] = c + (j < length ? uint8array[j++] : extra++);
     }
 
+    uint16array[len] = extra;
     return fromCharCode.apply(void 0, _toConsumableArray(uint16array));
   };
 
   var unpack = function unpack(chars) {
     var codes = [];
-    var length = chars.length;
+    var length = chars.length - 1;
 
     for (var i = 0; i < length; i++) {
       var c = chars.charCodeAt(i);
       codes.push(c >> 8, c & 0xFF);
     }
 
-    if (codes[length * 2 - 1] === 0xFF) codes.pop();
+    if (chars.charCodeAt(length) === 1) codes.pop();
     return Uint8Array.from(codes);
   };
 
