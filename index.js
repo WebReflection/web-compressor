@@ -81,9 +81,7 @@ var webCompressor = (function (exports) {
 
   /*! (c) Andrea Giammarchi @WebReflection */
   var ceil = Math.ceil;
-  var defineProperty = Object.defineProperty;
   var fromCharCode = String.fromCharCode;
-
   var pack = function pack(uint8array) {
     var extra = 0;
     var length = uint8array.length;
@@ -98,7 +96,6 @@ var webCompressor = (function (exports) {
     uint16array[len] = extra;
     return fromCharCode.apply(void 0, _toConsumableArray(uint16array));
   };
-
   var unpack = function unpack(chars) {
     var codes = [];
     var length = chars.length - 1;
@@ -108,9 +105,12 @@ var webCompressor = (function (exports) {
       codes.push(c >> 8, c & 0xFF);
     }
 
-    if (chars.charCodeAt(length) === 1) codes.pop();
+    if (chars.charCodeAt(length)) codes.pop();
     return Uint8Array.from(codes);
   };
+
+  var defineProperty = Object.defineProperty;
+  var fromCharCode$1 = String.fromCharCode;
 
   var asCharCode = function asCharCode(c) {
     return c.charCodeAt(0);
@@ -127,7 +127,7 @@ var webCompressor = (function (exports) {
   };
   var toBase64String = {
     value: function value() {
-      return btoa(fromCharCode.apply(void 0, _toConsumableArray(new Uint8Array(this))));
+      return btoa(fromCharCode$1.apply(void 0, _toConsumableArray(new Uint8Array(this))));
     }
   };
 
