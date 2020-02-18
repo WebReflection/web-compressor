@@ -45,7 +45,8 @@ compress('This string is long enough to be worth using compression'.repeat(10))
     // the compressed arrayBuffer has a special toString implementation
     const asString = '' + arrayBuffer;
 
-    // such string is the base64 version of the compressed buffer
+    // such string is either the base64 version of the compressed buffer
+    // or its utf-16 representation, accordingly with the method
     console.log('compressed length', asString.length);
 
     // when decompressing you can pass either the buffer or its string
