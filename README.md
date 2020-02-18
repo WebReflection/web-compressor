@@ -1,5 +1,7 @@
 # WebCompressor
 
+<sup>**Social Media Photo by [Tarik Haiga](https://unsplash.com/@tar1k) on [Unsplash](https://unsplash.com/)**</sup>
+
 A gzip/deflate compressor based on De/CompressionStream buffers and base64.
 
 ```js
