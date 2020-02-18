@@ -59,30 +59,10 @@ var webCompressor = (function (exports) {
     return Constructor;
   }
 
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-  }
-
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-      return arr2;
-    }
-  }
-
-  function _iterableToArray(iter) {
-    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-  }
-
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
-  }
-
   /*! (c) Andrea Giammarchi @WebReflection */
   var ceil = Math.ceil;
   var fromCharCode = String.fromCharCode;
-  var pack = function pack(uint8array) {
+  var encode = function encode(uint8array) {
     var extra = 0;
     var length = uint8array.length;
     var len = ceil(length / 2);
@@ -94,9 +74,9 @@ var webCompressor = (function (exports) {
     }
 
     uint16array[len] = extra;
-    return fromCharCode.apply(void 0, _toConsumableArray(uint16array));
+    return fromCharCode.apply(null, uint16array);
   };
-  var unpack = function unpack(chars) {
+  var decode = function decode(chars) {
     var codes = [];
     var length = chars.length - 1;
 
@@ -109,25 +89,28 @@ var webCompressor = (function (exports) {
     return Uint8Array.from(codes);
   };
 
-  var defineProperty = Object.defineProperty;
   var fromCharCode$1 = String.fromCharCode;
+  var encode$1 = function encode(uint8array) {
+    return btoa(fromCharCode$1.apply(null, uint8array));
+  };
 
   var asCharCode = function asCharCode(c) {
     return c.charCodeAt(0);
   };
 
-  var asUint8Array = function asUint8Array(value) {
-    return Uint8Array.from(atob(value), asCharCode);
+  var decode$1 = function decode(chars) {
+    return Uint8Array.from(atob(chars), asCharCode);
   };
 
-  var toUTF16String = {
+  var defineProperty = Object.defineProperty;
+  var asUTF16String = {
     value: function value() {
-      return pack(new Uint8Array(this));
+      return encode(new Uint8Array(this));
     }
   };
-  var toBase64String = {
+  var asBase64String = {
     value: function value() {
-      return btoa(fromCharCode$1.apply(void 0, _toConsumableArray(new Uint8Array(this))));
+      return encode$1(new Uint8Array(this));
     }
   };
 
@@ -145,8 +128,8 @@ var webCompressor = (function (exports) {
       _classCallCheck(this, WebCompressor);
 
       var isUTF16 = outcome === 'utf-16';
-      this.compress = this.compress.bind(this, format, isUTF16 ? toUTF16String : toBase64String);
-      this.decompress = this.decompress.bind(this, format, isUTF16 ? unpack : asUint8Array);
+      this.compress = this.compress.bind(this, format, isUTF16 ? asUTF16String : asBase64String);
+      this.decompress = this.decompress.bind(this, format, isUTF16 ? decode : decode$1);
     }
 
     _createClass(WebCompressor, [{

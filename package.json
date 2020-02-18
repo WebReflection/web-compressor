@@ -30,5 +30,9 @@
     "uglify-js": "^3.7.7"
   },
   "module": "esm/index.js",
-  "unpkg": "new.js"
+  "unpkg": "new.js",
+  "dependencies": {
+    "uint8-to-base64": "^0.1.1",
+    "uint8-to-utf16": "^0.2.0"
+  }
 }

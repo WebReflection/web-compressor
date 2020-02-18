@@ -1,21 +1,17 @@
 'use strict';
 /*! (c) Andrea Giammarchi @WebReflection */
 
-const {pack, unpack} = require('./packer.js');
+const {encode: utf16Encode, decode: utf16Decode} = require('uint8-to-utf16');
+const {encode: b64Encode, decode: b64Decode} = require('uint8-to-base64');
 
 const {defineProperty} = Object;
-const {fromCharCode} = String;
 
-const asCharCode = c => c.charCodeAt(0);
-
-const asUint8Array = value => Uint8Array.from(atob(value), asCharCode);
-
-const toUTF16String = {value() {
-  return pack(new Uint8Array(this));
+const asUTF16String = {value() {
+  return utf16Encode(new Uint8Array(this));
 }};
 
-const toBase64String = {value() {
-  return btoa(fromCharCode(...new Uint8Array(this)));
+const asBase64String = {value() {
+  return b64Encode(new Uint8Array(this));
 }};
 
 const transform = (stream, value) => new Response(
@@ -26,10 +22,10 @@ module.exports = class WebCompressor {
   constructor(format = 'deflate', outcome = 'base64') {
     const isUTF16 = outcome === 'utf-16';
     this.compress = this.compress.bind(this, format,
-      isUTF16 ? toUTF16String : toBase64String
+      isUTF16 ? asUTF16String : asBase64String
     );
     this.decompress = this.decompress.bind(this, format,
-      isUTF16 ? unpack : asUint8Array
+      isUTF16 ? utf16Decode : b64Decode
     );
   }
   async compress(format, toString, value) {
