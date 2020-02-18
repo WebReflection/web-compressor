@@ -11,8 +11,8 @@ The class in a nutshell:
 ```js
 class WebCompressor {
   constructor(
-    format:string,  // deflate (default), gzip, or others
-    method:string   // base64 (default) or utf-16
+    format: string,  // deflate (default), gzip, or others
+    method: string   // base64 (default) or utf-16
   )
 
   async compress(any:string): Promise<arrayBuffer>
@@ -24,9 +24,8 @@ class WebCompressor {
 }
 ```
 
-The `utf-16` compression method makes it possible to shrink into a JavaScript string any compressed utf-8 output.
-Currently, this compression method is experimental, as it needs tests.
-On average though, this produces 1/3rd of the base64 outcome, so if proven to be reliable with any sort of binary data, it might become the default in the future.
+The `utf-16` compression method makes it possible to shrink into a JavaScript string any compressed utf-8 buffer.
+On average though, this produces 1/3rd of the base64 outcome, but it's not clear if there are real advantages over base64.
 
 ## Example
 
