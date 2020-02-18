@@ -4,6 +4,8 @@
 
 A gzip/deflate compressor based on De/CompressionStream buffers and base64.
 
+**[Live Demo](https://codepen.io/WebReflection/pen/XWbKJQq?editors=0011)** that requires a browser compatible with [De/CompressionStream](https://wicg.github.io/compression/) such as Chrome 80+.
+
 ```js
 import WebCompressor from 'web-compressor';
 // const WebCompressor = require('web-compressor');
