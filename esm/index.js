@@ -5,12 +5,20 @@ import {encode as b64Encode, decode as b64Decode} from 'uint8-to-base64';
 
 const {defineProperty} = Object;
 
+const encodes = new WeakMap;
+
 const asUTF16String = {value() {
-  return utf16Encode(new Uint8Array(this));
+  let encoded = encodes.get(this);
+  if (!encoded)
+    encodes.set(this, encoded = utf16Encode(new Uint8Array(this)));
+  return encoded;
 }};
 
 const asBase64String = {value() {
-  return b64Encode(new Uint8Array(this));
+  let encoded = encodes.get(this);
+  if (!encoded)
+    encodes.set(this, encoded = b64Encode(new Uint8Array(this)));
+  return encoded;
 }};
 
 const transform = (stream, value) => new Response(
