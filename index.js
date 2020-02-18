@@ -103,18 +103,19 @@ var webCompressor = (function (exports) {
   };
 
   var defineProperty = Object.defineProperty;
-  var encodes = new WeakMap();
+  var utf16encodes = new WeakMap();
+  var b64encodes = new WeakMap();
   var asUTF16String = {
     value: function value() {
-      var encoded = encodes.get(this);
-      if (!encoded) encodes.set(this, encoded = encode(new Uint8Array(this)));
+      var encoded = utf16encodes.get(this);
+      if (!encoded) utf16encodes.set(this, encoded = encode(new Uint8Array(this)));
       return encoded;
     }
   };
   var asBase64String = {
     value: function value() {
-      var encoded = encodes.get(this);
-      if (!encoded) encodes.set(this, encoded = encode$1(new Uint8Array(this)));
+      var encoded = b64encodes.get(this);
+      if (!encoded) b64encodes.set(this, encoded = encode$1(new Uint8Array(this)));
       return encoded;
     }
   };
