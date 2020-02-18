@@ -1,0 +1,29 @@
+{
+  "name": "web-compressor",
+  "version": "0.0.0",
+  "description": "A gzip/deflate compressor based on De/CompressionStream buffers and base64",
+  "main": "cjs/index.js",
+  "scripts": {
+    "build": "npm run cjs && npm run rollup:new && npm run rollup:babel && npm run min && npm run fix:default",
+    "cjs": "ascjs --no-default esm cjs",
+    "rollup:new": "rollup --config rollup/new.config.js",
+    "rollup:babel": "rollup --config rollup/babel.config.js",
+    "min": "uglifyjs index.js --support-ie8 --comments=/^!/ -c -m -o min.js",
+    "fix:default": "sed -i 's/({})/({}).default/' index.js && sed -i 's/({})/({}).default/' new.js && sed -i 's/({})/({}).default/' min.js"
+  },
+  "keywords": ["Web", "compressor", "deflate", "gzip"],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "ascjs": "^3.1.2",
+    "rollup": "^1.31.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.2.0",
+    "uglify-js": "^3.7.7"
+  },
+  "module": "esm/index.js",
+  "unpkg": "new.js"
+}
