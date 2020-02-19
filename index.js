@@ -64,17 +64,16 @@ var webCompressor = (function (exports) {
   var fromCharCode = String.fromCharCode;
   var encode = function encode(uint8array) {
     var extra = 0;
+    var output = [];
     var length = uint8array.length;
     var len = ceil(length / 2);
-    var uint16array = new Uint16Array(len + 1);
 
     for (var j = 0, i = 0; i < len; i++) {
-      var c = uint8array[j++] << 8;
-      uint16array[i] = c + (j < length ? uint8array[j++] : extra++);
+      output.push(fromCharCode((uint8array[j++] << 8) + (j < length ? uint8array[j++] : extra++)));
     }
 
-    uint16array[len] = extra;
-    return fromCharCode.apply(null, uint16array);
+    output.push(fromCharCode(extra));
+    return output.join('');
   };
   var decode = function decode(chars) {
     var codes = [];
@@ -91,7 +90,13 @@ var webCompressor = (function (exports) {
 
   var fromCharCode$1 = String.fromCharCode;
   var encode$1 = function encode(uint8array) {
-    return btoa(fromCharCode$1.apply(null, uint8array));
+    var output = [];
+
+    for (var i = 0, length = uint8array.length; i < length; i++) {
+      output.push(fromCharCode$1(uint8array[i]));
+    }
+
+    return btoa(output.join(''));
   };
 
   var asCharCode = function asCharCode(c) {
