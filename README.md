@@ -24,8 +24,14 @@ class WebCompressor {
 }
 ```
 
-The `utf-16` compression method makes it possible to shrink into a JavaScript string any compressed utf-8 buffer.
-On average though, this produces 1/3rd of the base64 outcome, but it's not clear if there are real advantages over base64.
+#### About the compression method
+
+The `utf-16` compression method makes it possible to shrink into a JavaScript string any compressed `utf-8` buffer, producing on average half up to 1/3rd of the equivalent _base64_ output.
+
+You can test some `localStorage` [benchmark here](https://gist.github.com/WebReflection/7bab57a330e4a318049fe2680ba09ed3) to verify `utf-16` grants 2.5X extra entries, compared to _base64_.
+
+For the time being though, the `utf-16` method is not used as default, for the simple reason that it's not standardized as much as base64 is.
+
 
 ## Example
 
