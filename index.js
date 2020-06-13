@@ -107,21 +107,33 @@ var webCompressor = (function (exports) {
     return Uint8Array.from(atob(chars), asCharCode);
   };
 
+  var umap = (function (_) {
+    return {
+      // About: get: _.get.bind(_)
+      // It looks like WebKit/Safari didn't optimize bind at all,
+      // so that using bind slows it down by 60%.
+      // Firefox and Chrome are just fine in both cases,
+      // so let's use the approach that works fast everywhere 👍
+      get: function get(key) {
+        return _.get(key);
+      },
+      set: function set(key, value) {
+        return _.set(key, value), value;
+      }
+    };
+  });
+
   var defineProperty = Object.defineProperty;
-  var utf16encodes = new WeakMap();
-  var b64encodes = new WeakMap();
+  var utf16encodes = umap(new WeakMap());
+  var b64encodes = umap(new WeakMap());
   var asUTF16String = {
     value: function value() {
-      var encoded = utf16encodes.get(this);
-      if (!encoded) utf16encodes.set(this, encoded = encode(new Uint8Array(this)));
-      return encoded;
+      return utf16encodes.get(this) || utf16encodes.set(this, encode(new Uint8Array(this)));
     }
   };
   var asBase64String = {
     value: function value() {
-      var encoded = b64encodes.get(this);
-      if (!encoded) b64encodes.set(this, encoded = encode$1(new Uint8Array(this)));
-      return encoded;
+      return b64encodes.get(this) || b64encodes.set(this, encode$1(new Uint8Array(this)));
     }
   };
 
@@ -129,9 +141,7 @@ var webCompressor = (function (exports) {
     return new Response(new Blob([value]).stream().pipeThrough(stream)).arrayBuffer();
   };
 
-  var WebCompressor =
-  /*#__PURE__*/
-  function () {
+  var WebCompressor = /*#__PURE__*/function () {
     function WebCompressor() {
       var format = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'deflate';
       var outcome = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'base64';
@@ -146,9 +156,7 @@ var webCompressor = (function (exports) {
     _createClass(WebCompressor, [{
       key: "compress",
       value: function () {
-        var _compress = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee(format, toString, value) {
+        var _compress = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(format, toString, value) {
           return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
               switch (_context.prev = _context.next) {
@@ -179,9 +187,7 @@ var webCompressor = (function (exports) {
     }, {
       key: "decompress",
       value: function () {
-        var _decompress = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee2(format, converter, value) {
+        var _decompress = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(format, converter, value) {
           return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
               switch (_context2.prev = _context2.next) {

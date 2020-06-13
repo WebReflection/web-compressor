@@ -3,24 +3,21 @@
 
 const {encode: utf16Encode, decode: utf16Decode} = require('uint8-to-utf16');
 const {encode: b64Encode, decode: b64Decode} = require('uint8-to-base64');
+const umap = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('umap'));
 
 const {defineProperty} = Object;
 
-const utf16encodes = new WeakMap;
-const b64encodes = new WeakMap;
+const utf16encodes = umap(new WeakMap);
+const b64encodes = umap(new WeakMap);
 
 const asUTF16String = {value() {
-  let encoded = utf16encodes.get(this);
-  if (!encoded)
-    utf16encodes.set(this, encoded = utf16Encode(new Uint8Array(this)));
-  return encoded;
+  return utf16encodes.get(this) ||
+          utf16encodes.set(this, utf16Encode(new Uint8Array(this)));
 }};
 
 const asBase64String = {value() {
-  let encoded = b64encodes.get(this);
-  if (!encoded)
-    b64encodes.set(this, encoded = b64Encode(new Uint8Array(this)));
-  return encoded;
+  return b64encodes.get(this) ||
+          b64encodes.set(this, b64Encode(new Uint8Array(this)));
 }};
 
 const transform = (stream, value) => new Response(
